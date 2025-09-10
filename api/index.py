@@ -37,11 +37,6 @@ except ImportError as e:
 # 创建FastAPI应用实例
 app = create_app()
 
-# Vercel需要的handler函数
-def handler(request, response):
-    """Vercel serverless function handler"""
-    return app(request, response)
-
 # 如果直接运行此文件，启动开发服务器
 if __name__ == "__main__":
     import uvicorn
