@@ -1,4 +1,10 @@
 
+# 启动项目http
+```
+pip install .[api] 
+
+python -m ddddocr api 
+```
 
 # DdddOcr 带带弟弟OCR通用验证码离线本地识别SDK免费开源版
 
