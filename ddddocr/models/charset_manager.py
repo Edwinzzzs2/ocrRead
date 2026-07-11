@@ -92,8 +92,19 @@ class CharsetManager:
         self.charset_range.clear()
         
         if isinstance(charset_range, int):
-            # 按索引范围限制
-            if 0 <= charset_range < len(self.charset):
+            # 兼容原版 ddddocr 预设范围 (0: 纯数字, 1: 小写, 2: 大写, 3: 大小写, 4: 小写+数字, 5: 大写+数字, 6: 大小写+数字)
+            presets = [
+                "0123456789",
+                "abcdefghijklmnopqrstuvwxyz",
+                "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
+                "abcdefghijklmnopqrstuvwxyz0123456789",
+                "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+            ]
+            if 0 <= charset_range < len(presets):
+                self.charset_range = list(presets[charset_range])
+            elif 0 <= charset_range < len(self.charset):
                 self.charset_range = self.charset[:charset_range + 1]
         elif isinstance(charset_range, str):
             # 按字符串限制
