@@ -13,5 +13,14 @@ __all__ = [
     'BaseEngine',
     'OCREngine',
     'DetectionEngine',
-    'SlideEngine'
+    'SlideEngine',
+    'DdddOcr'
 ]
+
+
+def __getattr__(name: str):
+    # 延迟导入，避免 compat.v1 -> core -> compat.v1 的循环依赖
+    if name == 'DdddOcr':
+        from ..compat.v1 import DdddOcr as _DdddOcr
+        return _DdddOcr
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

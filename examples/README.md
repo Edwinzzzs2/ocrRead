@@ -1,10 +1,3 @@
-# 启动http api
-```
-pip install .[api]
-python -m ddddocr api
-
-```
-
 # DdddOcr - 通用验证码识别SDK
 
 <p align="center">

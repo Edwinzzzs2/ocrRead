@@ -218,7 +218,7 @@ class MCPHandler:
             """MCP协议信息"""
             return {
                 "protocol": "MCP",
-                "version": "1.0.0",
+                "version": "1.6.1",
                 "description": "DDDDOCR MCP协议支持",
                 "endpoints": {
                     "capabilities": "/mcp/capabilities",

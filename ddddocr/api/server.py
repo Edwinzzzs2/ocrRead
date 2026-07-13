@@ -28,7 +28,7 @@ class DDDDOCRService:
         self.slide_instance = None
         self.enabled_features = set()
         self.start_time = time.time()
-        self.version = "1.6.0"
+        self.version = "1.6.1"
     
     def initialize(self, config: InitializeRequest) -> Dict[str, Any]:
         """初始化服务"""
@@ -172,7 +172,7 @@ def create_app() -> FastAPI:
     app = FastAPI(
         title="DDDDOCR API",
         description="带带弟弟OCR通用验证码识别API服务",
-        version="1.6.0",
+        version="1.6.1",
         docs_url="/docs",
         redoc_url="/redoc",
         lifespan=lifespan
