@@ -80,6 +80,7 @@ def create_routes(app: FastAPI, service):
     async def ocr_recognition(request: OCRRequest):
         """执行OCR识别"""
         try:
+            service.ensure_ocr_initialized()
             if not service.ocr_instance:
                 raise HTTPException(status_code=400, detail="OCR功能未初始化，请先调用 /initialize 接口")
             

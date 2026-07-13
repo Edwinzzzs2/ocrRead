@@ -6,6 +6,7 @@ FastAPI服务器实现
 import time
 import base64
 import traceback
+import threading
 from typing import Optional, Dict, Any
 from contextlib import asynccontextmanager
 
@@ -29,6 +30,38 @@ class DDDDOCRService:
         self.enabled_features = set()
         self.start_time = time.time()
         self.version = "1.6.1"
+        self._initialize_lock = threading.Lock()
+
+    def ensure_ocr_initialized(self) -> None:
+        """确保当前函数实例已经加载可用的 OCR 模型。"""
+        if self.ocr_instance and "ocr" in self.enabled_features:
+            return
+
+        with self._initialize_lock:
+            if self.ocr_instance and "ocr" in self.enabled_features:
+                return
+
+            import ddddocr
+
+            # Vercel 的不同请求可能落到不同实例，因此每个新实例都要自行加载模型。
+            self.ocr_instance = ddddocr.DdddOcr(
+                ocr=True,
+                det=False,
+                old=False,
+                beta=True,
+                use_gpu=False,
+                device_id=0,
+                show_ad=False,
+            )
+            self.enabled_features.add("ocr")
+
+            if not self.slide_instance:
+                self.slide_instance = ddddocr.DdddOcr(
+                    ocr=False,
+                    det=False,
+                    show_ad=False,
+                )
+                self.enabled_features.add("slide")
     
     def initialize(self, config: InitializeRequest) -> Dict[str, Any]:
         """初始化服务"""
@@ -136,6 +169,7 @@ class DDDDOCRService:
     
     def get_status(self) -> StatusResponse:
         """获取服务状态"""
+        self.ensure_ocr_initialized()
         loaded_models = []
         if self.ocr_instance:
             loaded_models.append("ocr")
